@@ -48,7 +48,7 @@ class Board:
     # represent exactly the same state. 
     # READER EXERCISE: YOU MUST COMPLETE THIS FUNCTION
     def __eq__(self,other):
-        pass
+        return self.screen == other.screen and self.items == other.items
     
     # This method will mutate this board to contain all dummy 
     # turtles. This way the board can be reset when a new game
@@ -74,9 +74,15 @@ class Board:
     # This method should return True if the board 
     # is completely filled up (no dummy turtles). 
     # Otherwise, it should return False.
-    # READER EXERCISE: YOU MUST COMPLETE THIS FUNCTION
+    # READER EXERCISE: YOU MUST COMPLETE THIS FUNCTION NOT DONE
     def full(self):
-        pass
+        state = True
+        for i in range(3):
+            for j in range(3):
+                if self.items[i][j] == Dummy():
+                    
+                    state = False            
+        return state
     
     # This method should draw the X's and O's
     # Of this board on the screen. 
