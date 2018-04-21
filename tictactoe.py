@@ -48,7 +48,7 @@ class Board:
     # represent exactly the same state. 
     # READER EXERCISE: YOU MUST COMPLETE THIS FUNCTION
     def __eq__(self,other):
-        return self.screen == other.screen and self.items == other.items
+        return self.items == other.items
     
     # This method will mutate this board to contain all dummy 
     # turtles. This way the board can be reset when a new game
@@ -59,7 +59,7 @@ class Board:
         self.screen.tracer(1)
         for i in range(3):
             for j in range(3):
-                self.items[i][j].goto(-100,-100)
+                self.items[i][j].goto(-100, -100)
                 self.items[i][j] = Dummy()
                 
         self.screen.tracer(0)
@@ -69,19 +69,19 @@ class Board:
     # If the human has won, return -1. Otherwise, return 0.
     # READER EXERCISE: YOU MUST COMPLETE THIS FUNCTION
     def eval(self):
-        pass
+        return 0
 
     # This method should return True if the board 
     # is completely filled up (no dummy turtles). 
     # Otherwise, it should return False.
     # READER EXERCISE: YOU MUST COMPLETE THIS FUNCTION NOT DONE
-    def full(self):##############################
+    def full(self):
+        state = True
         for i in range(3):
             for j in range(3):
-                print(i, j)
-                if self.items[i][j] == Dummy():
-                    
-                    state = False  
+                if self.items[i][j].eval() == Dummy().eval():
+                    state = False
+                    break
         return state
     
     # This method should draw the X's and O's
@@ -105,9 +105,10 @@ class Dummy:
     
     def eval(self):
         return 0
-    
+
     def goto(self,x,y):
         pass
+
     
 # In the X and O classes below the constructor begins by initializing the 
 # RawTurtle part of the object with the call to super().__init__(canvas). The
