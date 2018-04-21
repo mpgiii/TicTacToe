@@ -75,13 +75,13 @@ class Board:
     # is completely filled up (no dummy turtles). 
     # Otherwise, it should return False.
     # READER EXERCISE: YOU MUST COMPLETE THIS FUNCTION NOT DONE
-    def full(self):
-        state = True
+    def full(self):##############################
         for i in range(3):
             for j in range(3):
+                print(i, j)
                 if self.items[i][j] == Dummy():
                     
-                    state = False            
+                    state = False  
         return state
     
     # This method should draw the X's and O's
@@ -117,26 +117,28 @@ class Dummy:
 # a RawTurtle. 
 class X(RawTurtle):
     def __init__(self, canvas):
-        super().__init__(canvas)
-        self.ht()
-        self.getscreen().register_shape("X",((-40,-36),(-40,-44),(0,-4),(40,-44),(40,-36), \
+        if canvas != None:
+            super().__init__(canvas)
+            self.ht()
+            self.getscreen().register_shape("X",((-40,-36),(-40,-44),(0,-4),(40,-44),(40,-36), \
                              (4,0),(40,36),(40,44),(0,4),(-40,44),(-40,36),(-4,0),(-40,-36)))
-        self.shape("X")
-        self.penup()
-        self.speed(5)
-        self.goto(-100,-100)  
+            self.shape("X")
+            self.penup()
+            self.speed(5)
+            self.goto(-100,-100)  
         
     def eval(self):
         return Computer
     
 class O(RawTurtle):
     def __init__(self, canvas):
-        super().__init__(canvas)
-        self.ht()
-        self.shape("circle")
-        self.penup()
-        self.speed(5)
-        self.goto(-100,-100)
+        if canvas != None:
+            super().__init__(canvas)
+            self.ht()
+            self.shape("circle")
+            self.penup()
+            self.speed(5)
+            self.goto(-100,-100)
         
     def eval(self):
         return Human
