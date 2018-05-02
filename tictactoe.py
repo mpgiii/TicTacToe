@@ -12,6 +12,7 @@ screenMax = 300
 Human = -1
 Computer = 1  
 
+
 class Board:
     # When a board is constructed, you may want to make a copy of the board.
     # This can be a shallow copy of the board because Turtle objects are 
@@ -48,9 +49,16 @@ class Board:
     # represent exactly the same state. 
     # READER EXERCISE: YOU MUST COMPLETE THIS FUNCTION
     def __eq__(self,other):
-        return self.items == other.items
-    
-    # This method will mutate this board to contain all dummy 
+        return self.items[0][0].__class__ == other.items[0][0].__class__ and \
+               self.items[0][1].__class__ == other.items[0][1].__class__ and \
+               self.items[0][2].__class__ == other.items[0][2].__class__ and \
+               self.items[1][0].__class__ == other.items[1][0].__class__ and \
+               self.items[1][1].__class__ == other.items[1][1].__class__ and \
+               self.items[1][2].__class__ == other.items[1][2].__class__ and \
+               self.items[2][0].__class__ == other.items[2][0].__class__ and \
+               self.items[2][1].__class__ == other.items[2][1].__class__ and \
+               self.items[2][2].__class__ == other.items[2][2].__class__
+    # This method will mutate this board to contain all dummy
     # turtles. This way the board can be reset when a new game
     # is selected. It should NOT be used except when starting
     # a new game. 
@@ -79,15 +87,17 @@ class Board:
         state = True
         for i in range(3):
             for j in range(3):
-                if self.items[i][j].eval() == Dummy().eval():
+                if self.items[i][j].__class__ == Dummy().__class__:
                     state = False
                     break
+            if not state:
+                break
         return state
     
     # This method should draw the X's and O's
     # Of this board on the screen. 
     def drawXOs(self):
-        
+
         for row in range(3):
             for col in range(3):
                 if self[row][col].eval() != 0:
@@ -156,7 +166,23 @@ class O(RawTurtle):
 # READER EXERCISE: YOU MUST COMPLETE THIS FUNCTION
 def minimax(player,board):
     pass
-
+    '''
+    HEY THIS IS PSEUDO CODE:
+    
+    if player wins:
+        return -1
+    elif computer wins:
+        return 1
+    elif Board.full:
+        return 0
+    if player == Computer:
+        try moves for computer
+        call minimax again with player being human
+        minimax(Human, board)
+    elif player == Human:
+        call minimax again with player being computer
+        minimax(Computer, board)
+    '''
       
 
 class TicTacToe(tkinter.Frame):
@@ -236,14 +262,14 @@ class TicTacToe(tkinter.Frame):
             # The locked variable prevents another event from being 
             # processed while the computer is making up its mind. 
             self.locked = True
-	    
+
             # Call Minimax to find the best move to make.
             # READER EXERCISE: YOU MUST COMPLETE THIS CODE
             # After writing this code, the maxMove tuple should
             # contain the best move for the computer. For instance,
             # if the best move is in the first row and third column
             # then maxMove would be (0,2).
-	    
+
             row, col = maxMove
             board[row][col] = X(cv)
             self.locked = False
