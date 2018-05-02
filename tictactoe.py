@@ -49,16 +49,16 @@ class Board:
     # represent exactly the same state. 
     # READER EXERCISE: YOU MUST COMPLETE THIS FUNCTION
     def __eq__(self,other):
-        return self.items[0][0].__class__ == other.items[0][0].__class__ and \
-               self.items[0][1].__class__ == other.items[0][1].__class__ and \
-               self.items[0][2].__class__ == other.items[0][2].__class__ and \
-               self.items[1][0].__class__ == other.items[1][0].__class__ and \
-               self.items[1][1].__class__ == other.items[1][1].__class__ and \
-               self.items[1][2].__class__ == other.items[1][2].__class__ and \
-               self.items[2][0].__class__ == other.items[2][0].__class__ and \
-               self.items[2][1].__class__ == other.items[2][1].__class__ and \
-               self.items[2][2].__class__ == other.items[2][2].__class__
-    # This method will mutate this board to contain all dummy
+        return type(self.items[0][0]) == type(other.items[0][0]) and \
+               type(self.items[0][1]) == type(other.items[0][1]) and \
+               type(self.items[0][2]) == type(other.items[0][2]) and \
+               type(self.items[1][0]) == type(other.items[1][0]) and \
+               type(self.items[1][1]) == type(other.items[1][1]) and \
+               type(self.items[1][2]) == type(other.items[1][2]) and \
+               type(self.items[2][0]) == type(other.items[2][0]) and \
+               type(self.items[2][1]) == type(other.items[2][1]) and \
+               type(self.items[2][2]) == type(other.items[2][2])
+            # This method will mutate this board to contain all dummy
     # turtles. This way the board can be reset when a new game
     # is selected. It should NOT be used except when starting
     # a new game. 
@@ -77,6 +77,30 @@ class Board:
     # If the human has won, return -1. Otherwise, return 0.
     # READER EXERCISE: YOU MUST COMPLETE THIS FUNCTION
     def eval(self):
+        # checks rows
+        for i in range(3):
+            if type(self.items[i][0]) == type(self.items[i][1]) and type(self.items[i][0]) ==type(self.items[i][2]):
+                if type(self.items[i][0]) == type(X(None)):
+                    return Computer
+                elif type(self.items[i][0]) == type(O(None)):
+                    return Human
+
+        # checks column
+        for j in range(3):
+            if type(self.items[0][j]) == type(self.items[1][j]) and type(self.items[0][j]) == type(self.items[2][j]):
+                if type(self.items[0][j]) == type(X(None)):
+                    return Computer
+                elif type(self.items[0][j]) == type(O(None)):
+                    return Human
+
+        # checks two diagonal cases
+        if type(self.items[0][0]) == type(self.items[1][1]) == type(self.items[2][2]) or \
+            type(self.items[0][2]) == type(self.items[1][1]) == type(self.items[2][0]):
+            if type(self.items[1][1]) == type(X(None)):
+                return Computer
+            elif type(self.items[1][1]) == type(O(None)):
+                return Human
+
         return 0
 
     # This method should return True if the board 
@@ -140,7 +164,8 @@ class X(RawTurtle):
         
     def eval(self):
         return Computer
-    
+
+
 class O(RawTurtle):
     def __init__(self, canvas):
         if canvas != None:
@@ -260,7 +285,7 @@ class TicTacToe(tkinter.Frame):
     
         def computerTurn():
             # The locked variable prevents another event from being 
-            # processed while the computer is making up its mind. 
+            # processed while the computer is making up its mind.
             self.locked = True
 
             # Call Minimax to find the best move to make.
@@ -269,6 +294,16 @@ class TicTacToe(tkinter.Frame):
             # contain the best move for the computer. For instance,
             # if the best move is in the first row and third column
             # then maxMove would be (0,2).
+
+            maxMove = None
+
+            for i in range(3):
+                for j in range(3):
+                    if board[i][j].__class__ == Dummy().__class__:
+                        maxMove = (i, j)
+                        break
+                if maxMove != None:
+                    break
 
             row, col = maxMove
             board[row][col] = X(cv)
