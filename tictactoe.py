@@ -106,7 +106,7 @@ class Board:
 
     # This method should return True if the board 
     # is completely filled up (no dummy turtles). 
-    # Otherwise, it should return False.
+    # Otherwise, it should return False. newBoard = Board(board)
     # READER EXERCISE: YOU MUST COMPLETE THIS FUNCTION NOT DONE
     def full(self):
         state = True
@@ -129,7 +129,8 @@ class Board:
                     self[row][col].st()
                     self[row][col].goto(col*100+50,row*100+50)
         
-        self.screen.update()        
+        self.screen.update()
+
 
 # This class is just for placeholder objects when no move has been made
 # yet at a position in the board. Having eval() return 0 is convenient when no
@@ -219,21 +220,25 @@ def minimax(player,board):
     elif board.full():
         return 0
 
-    if player == Computer:
-        for i in range(3):
-            for j in range(3):
-                if type(board.items[i][j]) == type(Dummy()):
-                    pass
-                    # find max of all values and return max value (recursive minimax call)
-                    # we also need to 
+    maxy = -10000
+    miny = 10000
 
-    if player == Human:
-        for i in range(3):
-            for j in range(3):
-                if type(board.items[i][j]) == type(Dummy()):
-                    pass
-                    # find max of all values and return min value (recursive minimax call)
+    for i in range(3):
+        for j in range(3):
+            if type(board.items[i][j]) == type(Dummy()):
 
+                if player == Computer:
+                    board.items[i][j] = X(None)
+                    newval = minimax(Human, board)
+                    if newval > maxy:
+                        maxy = newval
+
+                if player == Human:
+                    board.items[i][j] = O(None)
+                    newval = minimax(Computer, board)
+                    if newval < miny:
+                        miny = newval
+    return maxy
 
 class TicTacToe(tkinter.Frame):
     def __init__(self, master=None):
@@ -318,8 +323,18 @@ class TicTacToe(tkinter.Frame):
             # if the best move is in the first row and third column
             # then maxMove would be (0,2).
 
-            hold = minimax(Computer, board)
+            boardcopy = Board(board)
+            maxscore = -10000
 
+            for i in range(3):
+                for j in range(3):
+                    newscore = minimax(Computer, boardcopy)
+                    if newscore > maxscore:
+                        maxscore = newscore
+                        row = i
+                        col = j
+
+            maxMove = (row, col)
 
             row, col = maxMove
             board[row][col] = X(cv)
@@ -329,9 +344,9 @@ class TicTacToe(tkinter.Frame):
             if not self.locked:
                 row = int(y // 100)
                 col = int(x // 100)
-    
+
                 if board[row][col].eval() == 0:
-                    board[row][col] = O(cv) 
+                    board[row][col] = O(cv)
                     
                     self.turn = Computer
                     
