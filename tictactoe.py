@@ -58,10 +58,11 @@ class Board:
                type(self.items[2][0]) == type(other.items[2][0]) and \
                type(self.items[2][1]) == type(other.items[2][1]) and \
                type(self.items[2][2]) == type(other.items[2][2])
-            # This method will mutate this board to contain all dummy
+    # This method will mutate this board to contain all dummy
     # turtles. This way the board can be reset when a new game
     # is selected. It should NOT be used except when starting
-    # a new game. 
+    # a new game.
+
     def reset(self):
         
         self.screen.tracer(1)
@@ -111,7 +112,7 @@ class Board:
         state = True
         for i in range(3):
             for j in range(3):
-                if self.items[i][j].__class__ == Dummy().__class__:
+                if type(self.items[i][j]) == type(Dummy()):
                     state = False
                     break
             if not state:
@@ -190,10 +191,9 @@ class O(RawTurtle):
 # the board is full.    
 # READER EXERCISE: YOU MUST COMPLETE THIS FUNCTION
 def minimax(player,board):
-    pass
     '''
     HEY THIS IS PSEUDO CODE:
-    
+    #base case
     if player wins:
         return -1
     elif computer wins:
@@ -208,7 +208,32 @@ def minimax(player,board):
         call minimax again with player being computer
         minimax(Computer, board)
     '''
-      
+
+    #base cases
+    if board.eval() == Computer:
+        return 1
+
+    elif board.eval() == Human:
+        return -1
+
+    elif board.full():
+        return 0
+
+    if player == Computer:
+        for i in range(3):
+            for j in range(3):
+                if type(board.items[i][j]) == type(Dummy()):
+                    pass
+                    # find max of all values and return max value (recursive minimax call)
+                    # we also need to 
+
+    if player == Human:
+        for i in range(3):
+            for j in range(3):
+                if type(board.items[i][j]) == type(Dummy()):
+                    pass
+                    # find max of all values and return min value (recursive minimax call)
+
 
 class TicTacToe(tkinter.Frame):
     def __init__(self, master=None):
@@ -259,16 +284,14 @@ class TicTacToe(tkinter.Frame):
                 t.goto(290,i*100+100)
     
             screen.update()
-    
-    
+
         def newGame():
             #drawGrid()
             self.turn = Human
             board.reset()
             self.locked =False
             screen.update()
-    
-      
+
         def startHandler():
             newGame()
             
@@ -295,21 +318,13 @@ class TicTacToe(tkinter.Frame):
             # if the best move is in the first row and third column
             # then maxMove would be (0,2).
 
-            maxMove = None
+            hold = minimax(Computer, board)
 
-            for i in range(3):
-                for j in range(3):
-                    if board[i][j].__class__ == Dummy().__class__:
-                        maxMove = (i, j)
-                        break
-                if maxMove != None:
-                    break
 
             row, col = maxMove
             board[row][col] = X(cv)
             self.locked = False
-    
-      
+
         def mouseClick(x,y):
             if not self.locked:
                 row = int(y // 100)
@@ -344,11 +359,13 @@ class TicTacToe(tkinter.Frame):
         
         screen.listen()
 
+
 def main():
     root = tkinter.Tk()
     root.title("Tic Tac Toe")    
     application = TicTacToe(root)  
     application.mainloop()
-        
+
+
 if __name__ == "__main__":
     main()
