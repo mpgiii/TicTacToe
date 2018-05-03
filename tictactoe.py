@@ -49,6 +49,8 @@ class Board:
     # represent exactly the same state. 
     # READER EXERCISE: YOU MUST COMPLETE THIS FUNCTION
     def __eq__(self,other):
+        if other == None:
+            return False
         return type(self.items[0][0]) == type(other.items[0][0]) and \
                type(self.items[0][1]) == type(other.items[0][1]) and \
                type(self.items[0][2]) == type(other.items[0][2]) and \
@@ -80,7 +82,7 @@ class Board:
     def eval(self):
         # checks rows
         for i in range(3):
-            if type(self.items[i][0]) == type(self.items[i][1]) and type(self.items[i][0]) ==type(self.items[i][2]):
+            if type(self.items[i][0]) == type(self.items[i][1]) and type(self.items[i][0]) == type(self.items[i][2]):
                 if type(self.items[i][0]) == type(X(None)):
                     return Computer
                 elif type(self.items[i][0]) == type(O(None)):
@@ -153,7 +155,7 @@ class Dummy:
 # calling __init__ on the superclass initializes the part of the object that is
 # a RawTurtle. 
 class X(RawTurtle):
-    def __init__(self, canvas):
+    def __init__(self, canvas = None):
         if canvas != None:
             super().__init__(canvas)
             self.ht()
@@ -169,7 +171,7 @@ class X(RawTurtle):
 
 
 class O(RawTurtle):
-    def __init__(self, canvas):
+    def __init__(self, canvas = None):
         if canvas != None:
             super().__init__(canvas)
             self.ht()
@@ -220,25 +222,29 @@ def minimax(player,board):
     elif board.full():
         return 0
 
-    maxy = -10000
-    miny = 10000
-
+    maxy = 0
+    miny = 0
     for i in range(3):
         for j in range(3):
             if type(board.items[i][j]) == type(Dummy()):
-
+                newboard = Board(board)
                 if player == Computer:
-                    board.items[i][j] = X(None)
-                    newval = minimax(Human, board)
-                    if newval > maxy:
-                        maxy = newval
+                    newboard.items[i][j] = X(None)
+                    newmaxval = minimax(Human, newboard)
+                    if newmaxval > maxy:
+                        maxy = newmaxval
 
-                if player == Human:
-                    board.items[i][j] = O(None)
-                    newval = minimax(Computer, board)
-                    if newval < miny:
-                        miny = newval
-    return maxy
+                elif player == Human:
+                    newboard.items[i][j] = O(None)
+                    newminval = minimax(Computer, newboard)
+                    if newminval < miny:
+                        miny = newminval
+                        
+    if player == Human:
+        return miny
+    elif player == Computer:
+        return maxy
+
 
 class TicTacToe(tkinter.Frame):
     def __init__(self, master=None):
@@ -323,16 +329,21 @@ class TicTacToe(tkinter.Frame):
             # if the best move is in the first row and third column
             # then maxMove would be (0,2).
 
-            boardcopy = Board(board)
             maxscore = -10000
+            row = col = -1
+#start minimax with human after placing a X
 
             for i in range(3):
                 for j in range(3):
-                    newscore = minimax(Computer, boardcopy)
-                    if newscore > maxscore:
-                        maxscore = newscore
-                        row = i
-                        col = j
+                    boardcopy = Board(board)
+                    if type(boardcopy.items[i][j]) == type(Dummy()):
+                        boardcopy.items[i][j] = X(None)
+                        newscore = minimax(Human, boardcopy)
+                        if newscore > maxscore:
+                            maxscore = newscore
+                            row = i
+                            col = j
+
 
             maxMove = (row, col)
 
