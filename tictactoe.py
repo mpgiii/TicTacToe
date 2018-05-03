@@ -194,23 +194,6 @@ class O(RawTurtle):
 # the board is full.    
 # READER EXERCISE: YOU MUST COMPLETE THIS FUNCTION
 def minimax(player,board):
-    '''
-    HEY THIS IS PSEUDO CODE:
-    #base case
-    if player wins:
-        return -1
-    elif computer wins:
-        return 1
-    elif Board.full:
-        return 0
-    if player == Computer:
-        try moves for computer
-        call minimax again with player being human
-        minimax(Human, board)
-    elif player == Human:
-        call minimax again with player being computer
-        minimax(Computer, board)
-    '''
 
     #base cases
     if board.eval() == Computer:
@@ -222,8 +205,8 @@ def minimax(player,board):
     elif board.full():
         return 0
 
-    maxy = 0
-    miny = 0
+    maxy = -1
+    miny = 1
     for i in range(3):
         for j in range(3):
             if type(board.items[i][j]) == type(Dummy()):
@@ -331,7 +314,7 @@ class TicTacToe(tkinter.Frame):
 
             maxscore = -10000
             row = col = -1
-#start minimax with human after placing a X
+            #start minimax with human after placing a X
 
             for i in range(3):
                 for j in range(3):
